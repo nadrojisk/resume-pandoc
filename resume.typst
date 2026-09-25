@@ -1,0 +1,96 @@
+// -------------------------
+// Resume in Typst
+// Adapted for pandoc by Jordan Sosnowski
+// Based off of: https://github.com/jakeryang/resume (resume.latex)
+// License: MIT
+// -------------------------
+
+// ── Colors ──────────────────────────────────────────────────────────────────
+#let light-grey = rgb(212, 212, 212)
+#let dark-grey = rgb(77, 77, 77)
+#let text-grey = rgb(20, 20, 20)
+#let dark-blue = rgb(0, 51, 153)
+
+// ── Fonts ───────────────────────────────────────────────────────────────────
+// body: bodyfont (default: Lato)         headings: headingfont (default: Montserrat)
+// meta/contact line: metafont (default: same as body)
+// Override per resume via YAML front matter: bodyfont, headingfont, metafont
+// (must be installed system fonts).
+//
+// Contact-line icons use Font Awesome 6 (Free + Brands). Compile with the
+// fontawesome6 OTF directory on the font path -- see README for the exact
+// command.
+#let body-font = "$if(bodyfont)$$bodyfont$$else$Lato$endif$"
+#let heading-font = "$if(headingfont)$$headingfont$$else$Montserrat$endif$"
+#let meta-font = "$if(metafont)$$metafont$$else$Lato$endif$"
+
+#let fa-regular(code) = text(font: "Font Awesome 6 Free", code)
+#let fa-solid(code) = text(font: "Font Awesome 6 Free Solid", code)
+#let fa-brand(code) = text(font: "Font Awesome 6 Brands", code)
+
+// ── Page & base text ────────────────────────────────────────────────────────
+#set page(
+  paper: "us-letter",
+  margin: (left: 0.5in, right: 0.5in, top: 0.4in, bottom: 0.4in),
+)
+#set text(
+  font: body-font,
+  size: $if(fontsize)$$fontsize$$else$10pt$endif$,
+  fill: text-grey,
+)
+#set par(justify: false, leading: 0.55em)
+#show link: set text(fill: dark-blue)
+
+// ── Section formatting (mirrors resume.latex's \titleformat{\section}) ─────
+#set heading(numbering: none)
+
+#show heading.where(level: 1): it => {
+  v(6.5pt, weak: true)
+  text(font: heading-font, weight: "bold", size: 13pt, it.body)
+  v(-2pt)
+  line(length: 100%, stroke: 1.4pt + light-grey)
+  v(2pt)
+}
+
+// Subsection formatting (e.g. an employer heading grouping several roles)
+#show heading.where(level: 2): it => {
+  v(8pt, weak: true)
+  text(font: heading-font, weight: "bold", size: 10pt, it.body)
+  v(2pt)
+}
+
+// ── Custom commands (parity with resume.latex's \resume* macros) ───────────
+// Use from a raw typst block in markdown, e.g.:
+//   ```{=typst}
+//   #resume-subheading("Research Scientist", "2022 -- Present", "PNNL", "Richland, WA")
+//   ```
+#let resume-subheading(title, date, subtitle, location) = {
+  v(-2pt)
+  grid(
+    columns: (1fr, auto),
+    text(weight: "bold", title), text(fill: dark-grey, size: 0.9em, date),
+  )
+  grid(
+    columns: (1fr, auto),
+    emph(subtitle), text(fill: dark-grey, size: 0.9em, location),
+  )
+  v(-2pt)
+}
+
+#let my-underline(body) = underline(body)
+
+// ── Header ───────────────────────────────────────────────────────────────
+#align(center)[
+  #text(font: heading-font, weight: "bold", size: 24pt)[$name$] \
+  #v(3pt)
+  #text(font: meta-font, size: 9pt)[
+    #fa-solid("\u{f095}") #h(2pt) $phone$ #h(4pt) | #h(4pt)
+    #fa-regular("\u{f0e0}") #h(2pt) #link("mailto:$email$")[$email$] #h(4pt) | #h(4pt)
+    #fa-brand("\u{f09b}") #h(2pt) #link("https://github.com/$github$")[$github$] #h(4pt) | #h(4pt)
+    #fa-brand("\u{f08c}") #h(2pt) #link("https://linkedin.com/in/$linkedin$")[$linkedin$] #h(4pt) | #h(4pt)
+    #fa-solid("\u{f041}") #h(2pt) $location$
+  ]
+]
+#v(-3pt)
+
+$body$

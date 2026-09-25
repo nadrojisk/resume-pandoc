@@ -1,0 +1,104 @@
+// Pandoc Typst template: FAANGPath-style resume.
+// Visual design ported from resume.cls / the FAANGPath simple template --
+// see github.com/nadrojisk/latex-resume-template for the hand-authored
+// (non-pandoc) version this was adapted from. Uppercase bold section
+// headings with a full-width rule, diamond-separated centered contact
+// block, right-aligned dates via resume-subsection.
+//
+// Frontmatter variables: name, phone, email, github, linkedin, location,
+// fontsize (default 11pt), bodyfont/headingfont/metafont (default New
+// Computer Modern -- override with an installed system font).
+
+// Pinned to New Computer Modern (always bundled with Typst) since the
+// diamond glyph isn't guaranteed to exist in an arbitrary bodyfont/metafont.
+#let addr-sep = [ #text(font: "New Computer Modern")[#sym.diamond.stroked.small] ]
+
+#let body-font = "$if(bodyfont)$$bodyfont$$else$New Computer Modern$endif$"
+#let heading-font = "$if(headingfont)$$headingfont$$else$New Computer Modern$endif$"
+#let meta-font = "$if(metafont)$$metafont$$else$New Computer Modern$endif$"
+
+// GitHub/LinkedIn icons (Font Awesome 6 Brands). Compile with this repo's
+// fonts/ directory on the font path, e.g.:
+//   --pdf-engine-opt=--font-path --pdf-engine-opt=fonts
+// (see the Makefile's `pdf`/`docker-pdf` targets, or fonts/README.md, for
+// where those OTF files came from).
+#let fa-brand(code) = text(font: "Font Awesome 6 Brands", code)
+
+#set page(paper: "us-letter", margin: 0.4in)
+#set text(font: body-font, size: $if(fontsize)$$fontsize$$else$11pt$endif$)
+#set par(justify: false, leading: 0.55em, spacing: 0.65em)
+#set list(spacing: 0.5em, indent: 0pt)
+#show link: set text(fill: blue)
+#set heading(numbering: none)
+
+// Typst's default heading style inserts its own block spacing around
+// headings regardless of what a show rule returns, so `stack` is used
+// here to take explicit control of the text-to-rule gap instead of
+// fighting that default with more v()s.
+#show heading.where(level: 1): it => {
+  v(0.9em, weak: true)
+  stack(
+    dir: ttb,
+    spacing: 3pt,
+    text(font: heading-font, size: 11pt, weight: "bold", upper(it.body)),
+    line(length: 100%, stroke: 0.6pt + black),
+  )
+  v(0.35em)
+}
+
+// Mirrors the \rSubsection environment from resume.cls: title/date on one
+// line, subtitle/location italic on the next, then a tight bullet list.
+// Usable from markdown via a raw typst block, e.g.:
+//   ```{=typst}
+//   #resume-subsection("Research Scientist", "2022 -- Present", subtitle: "PNNL", location: "Richland, WA")[
+//   - Did a thing
+//   ]
+//   ```
+#let resume-subsection(title, date, subtitle: none, location: none, body) = {
+  grid(columns: (1fr, auto), strong(title), date)
+  if subtitle != none {
+    grid(columns: (1fr, auto), emph(subtitle), emph(location))
+  }
+  v(0.15em)
+  set list(spacing: 0.5em, indent: 0pt)
+  body
+  v(0.35em)
+}
+
+// A single role/date line, right-aligned -- for a role under an employer
+// H2 that has no separate subtitle/location row. Usable via a raw typst
+// block, e.g.:
+//   ```{=typst}
+//   #role-line("Incident Response Architect", "August 2025 -- Present")
+//   ```
+#let role-line(title, date) = grid(columns: (1fr, auto), emph(title), date)
+
+// Mirrors the original FAANGPath SKILLS table: bold category label left,
+// comma-separated list right, no bullets, no border. `rows` is an array
+// of (label, items) pairs. Usable via a raw typst block, e.g.:
+//   ```{=typst}
+//   #skills-table((
+//     ("Languages", "Python, Lua, C++"),
+//     ("Tools", "Git, Docker"),
+//   ))
+//   ```
+#let skills-table(rows) = table(
+  columns: (auto, 1fr),
+  stroke: none,
+  inset: (x: 0pt, y: 3pt),
+  column-gutter: 1.5em,
+  ..rows.map(r => (strong(r.at(0)), r.at(1))).flatten()
+)
+
+#align(center)[
+  #text(font: heading-font, size: 20pt, weight: "bold", upper[$name$])
+  #v(0.4em)
+  #text(font: meta-font)[
+    $phone$#(addr-sep)$location$
+    #v(0.1em)
+    #link("mailto:$email$")[$email$]#(addr-sep)#fa-brand("\u{f09b}") #h(2pt) #link("https://github.com/$github$")[$github$]#(addr-sep)#fa-brand("\u{f08c}") #h(2pt) #link("https://linkedin.com/in/$linkedin$")[$linkedin$]
+  ]
+]
+#v(0.3em)
+
+$body$

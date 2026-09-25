@@ -1,0 +1,18 @@
+                                                 Jane Doe
+                                 555-123-4567 |  jane@example.com |  |  | 
+Experience
+
+• Built distributed systems with Python & Rust
+• Reduced p99 latency by 40%
+Skills
+
+Languages
+• Python
+• Rust
+• Go
+
+Tools
+• Docker
+• Git
+• Make
+

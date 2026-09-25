@@ -1,0 +1,15 @@
+                                          JANE DOE
+                                      555-123-4567 ⋄ Springfield, USA
+                                 jane@example.com ⋄  janedoe ⋄  janedoe
+
+Experience
+Acme Corp
+Software Engineer                                                           2020 – Present
+Acme Corp                                                                          Remote
+• Built distributed systems with Python & Rust
+• Reduced p99 latency by 40%
+
+Skills
+Languages    Python, Rust, Go
+Tools        Docker, Git, Make
+
