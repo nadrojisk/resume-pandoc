@@ -21,7 +21,7 @@ RUN set -eux; \
     rm -rf /tmp/typst-x86_64-unknown-linux-musl
 
 WORKDIR /resume
-COPY resume.typst fangpath.typst skills.lua render.sh ./
+COPY resume.typst fangpath.typst coverletter.typst skills.lua render.sh ./
 COPY fonts ./fonts
 
 WORKDIR /data

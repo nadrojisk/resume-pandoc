@@ -4,7 +4,10 @@ Update this by hand before bumping `VERSION`. The section matching
 `VERSION` becomes the GitHub release notes. When you add a version, add its
 compare link at the bottom and update `[Unreleased]`.
 
-## [Unreleased]
+## [0.2.0] - 2026-10-08
+
+- Add a `coverletter` template (fangpath-style header, `recipient`, `date`,
+  `salutation` and `closing` frontmatter).
 
 ## [0.1.0] - 2026-09-25
 

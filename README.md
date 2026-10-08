@@ -8,7 +8,9 @@ docker run --rm -v "$(pwd):/data" ghcr.io/nadrojisk/resume-pandoc resume.md
 docker run --rm -e TEMPLATE=resume -v "$(pwd):/data" ghcr.io/nadrojisk/resume-pandoc resume.md
 ```
 
-Templates: `fangpath` (default) and `resume`. See `skills.lua` for the
+Templates: `fangpath` (default), `resume` and `coverletter` (a letter that
+matches the fangpath header; frontmatter takes `recipient`, `date`,
+`salutation`, `closing`). See `skills.lua` for the
 `skills`, `skills-table` and `job` fenced-div helpers. Bundled fonts are in
 `fonts/`. The image is linux/amd64 only.
 

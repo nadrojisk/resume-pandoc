@@ -1,0 +1,62 @@
+// Pandoc Typst template: FAANGPath-style cover letter.
+// Visual design ported from resume.cls / the FAANGPath simple template --
+// see github.com/nadrojisk/latex-resume-template for the hand-authored
+// (non-pandoc) version this was adapted from. Uppercase bold section
+// headings with a full-width rule, diamond-separated centered contact
+// block, right-aligned dates via resume-subsection.
+//
+// Matches fangpath.typst's header so a resume and its cover letter pair up.
+//
+// Frontmatter variables: name, phone, email, github, linkedin, location,
+// date (default: today), recipient (list of address lines), salutation
+// (default "Hello,"), closing (default "Sincerely,"), fontsize (default
+// 11pt), bodyfont/headingfont/metafont (default New Computer Modern --
+// override with an installed system font).
+
+// Pinned to New Computer Modern (always bundled with Typst) since the
+// diamond glyph isn't guaranteed to exist in an arbitrary bodyfont/metafont.
+#let addr-sep = [ #text(font: "New Computer Modern")[#sym.diamond.stroked.small] ]
+
+#let body-font = "$if(bodyfont)$$bodyfont$$else$New Computer Modern$endif$"
+#let heading-font = "$if(headingfont)$$headingfont$$else$New Computer Modern$endif$"
+#let meta-font = "$if(metafont)$$metafont$$else$New Computer Modern$endif$"
+
+// GitHub/LinkedIn icons (Font Awesome 6 Brands). Compile with this repo's
+// fonts/ directory on the font path, e.g.:
+//   --pdf-engine-opt=--font-path --pdf-engine-opt=fonts
+// (see the Makefile's `pdf`/`docker-pdf` targets, or fonts/README.md, for
+// where those OTF files came from).
+#let fa-brand(code) = text(font: "Font Awesome 6 Brands", code)
+
+#set page(paper: "us-letter", margin: (x: 1in, y: 0.8in))
+#set text(font: body-font, size: $if(fontsize)$$fontsize$$else$11pt$endif$)
+#set par(justify: false, leading: 0.6em, spacing: 1em)
+#show link: set text(fill: blue)
+
+#align(center)[
+  #text(font: heading-font, size: 20pt, weight: "bold", upper[$name$])
+  #v(0.4em)
+  #text(font: meta-font)[
+    $if(phone)$$phone$#(addr-sep)$endif$$location$
+    #v(0.1em)
+    #link("mailto:$email$")[$email$]#(addr-sep)#fa-brand("\u{f09b}") #h(2pt) #link("https://github.com/$github$")[$github$]#(addr-sep)#fa-brand("\u{f08c}") #h(2pt) #link("https://linkedin.com/in/$linkedin$")[$linkedin$]
+  ]
+  #v(0.2em)
+  #line(length: 100%, stroke: 0.6pt + black)
+]
+#v(0.8em)
+
+#align(right)[$if(date)$$date$$else$#datetime.today().display("[month repr:long] [day padding:none], [year]")$endif$]
+#v(0.6em)
+
+$if(recipient)$
+$for(recipient)$$recipient$$sep$ \
+$endfor$
+
+$endif$
+$if(salutation)$$salutation$$else$Hello,$endif$
+
+$body$
+
+$if(closing)$$closing$$else$Sincerely,$endif$ \
+$name$

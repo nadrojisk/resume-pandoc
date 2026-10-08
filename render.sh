@@ -1,7 +1,7 @@
 #!/bin/sh
 # Entrypoint for the resume-pandoc Docker image: renders an .md resume to a
 # same-named .pdf. Template defaults to fangpath; override with the
-# TEMPLATE env var (e.g. -e TEMPLATE=resume).
+# TEMPLATE env var (e.g. -e TEMPLATE=resume or coverletter).
 set -eu
 
 if [ "$#" -ne 1 ]; then
